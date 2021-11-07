@@ -5,7 +5,8 @@ class MyTemplateSingleLinkedList
 {
 	struct Node
 	{
-		Node(T data = {}, Node* next = nullptr)
+		Node() = default;
+		Node(const T& data/* = {}*/, Node* next = nullptr)
 			:Data{ data }, Next{ next }	{ }
 		Node(const Node&) = delete;
 		Node& operator=(const Node&) = delete;
@@ -14,10 +15,51 @@ class MyTemplateSingleLinkedList
 			Next = nullptr;
 		}
 
-		T     Data = {};
+		T     Data/* = {}*/;
 		Node* Next = nullptr;
 	};
+public:
+	class const_iterator
+	{
+	public:
+		const_iterator(Node* _p = nullptr)
+			:_p{ _p } {}
+		~const_iterator() { _p = nullptr; }
 
+		const T& operator*() { return _p->Data; }
+		const T* operator->() { return &_p->Data; }
+		const_iterator& operator++() { _p = _p->Next; return *this; }
+		const_iterator operator++(int)
+		{
+			auto temp = *this;
+			_p = _p->Next;
+			return temp;
+		}
+
+		bool                operator==(const const_iterator& rhs) const { return _p == rhs._p; }
+		bool                operator!=(const const_iterator& rhs) const { return !(*this == rhs); }
+		bool                operator==(nullptr_t p) const { return _p == nullptr; }
+		bool                operator!=(nullptr_t p) const { return _p != nullptr; }
+
+		Node* _p = nullptr;
+	};
+
+	class iterator : public const_iterator
+	{
+	public:
+		using const_iterator::const_iterator;
+
+		T& operator*() { return const_cast<T&>(const_iterator::operator*()); }
+		T* operator->() { return const_cast<T*>(const_iterator::operator->()); }
+		iterator& operator++() { const_iterator::operator++(); return *this; }
+		iterator      operator++(int)
+		{
+			iterator temp = *this;
+			const_iterator::operator++();
+
+			return temp;
+		}
+	};
 public:
 	// 기본 생성자
 	MyTemplateSingleLinkedList()
@@ -40,9 +82,9 @@ public:
 		:MyTemplateSingleLinkedList()
 	{
 		auto inserted = before_begin();
-		for (auto iter = other.begin(); iter != other.end(); iter = iter->Next)
+		for (auto iter = other.begin(); iter != other.end(); ++iter)
 		{
-			inserted = insert_after(inserted, iter->Data);
+			inserted = insert_after(inserted, *iter);
 		}
 	}
 
@@ -66,30 +108,31 @@ public:
 	}
 
 	// 첫 번째 요소를 반환한다.
-	T& front() { return begin()->Data; }
-	const T& front() const { return begin()->Data; }
+	T& front() { return *begin(); }
+	const T& front() const { return *begin(); }
 
 	// 시작 전 요소를 가리키는 반복자를 반환한다.
-	Node* before_begin() { return _head; }
-	const Node* before_begin() const { return _head; }
+	iterator before_begin() { return _head; }
+	const_iterator before_begin() const { return _head; }
 
 	// 시작 요소를 가리키는 반복자를 반환한다.
-	Node* begin() { return _head->Next; }
-	const Node* begin() const { return _head->Next; }
+	iterator begin() { return _head->Next; }
+	const_iterator begin() const { return _head->Next; }
 
 	// 끝 다음 요소를 가리키는 반복자를 반환한다.
-	Node* end() { return _end; }
-	const Node* end() const { return _end; };
+	iterator end() { return _end; }
+	const_iterator end() const { return _end; };
 
 	// pos 다음에 value를 삽입한다.
 	// 삽입된 요소를 가리키는 반복자를 반환한다.
-	Node* insert_after(Node* pos, const T& value)
+	iterator insert_after(iterator pos, const T& value)
 	{
+		Node* where = pos._p;
 		Node* newNode = new Node(value);
 
-		newNode->Next = pos->Next;
+		newNode->Next = where->Next;
 
-		pos->Next = newNode;
+		where->Next = newNode;
 
 		return newNode;
 	}
@@ -97,20 +140,21 @@ public:
 	// pos 다음 요소를 삭제한다.
 	// 삭제된 요소를 가리키는 반복자를 반환한다.
 	// 아무 요소도 없으면 end()를 반환한다.
-	Node* erase_after(Node* pos)
+	iterator erase_after(iterator pos)
 	{
-		Node* removeNode = pos->Next;
+		Node* where = pos._p;
+		Node* removeNode = where->Next;
 
 		if (empty())
 		{
 			return end();
 		}
 
-		pos->Next = removeNode->Next;
+		where->Next = removeNode->Next;
 		delete removeNode;
 		removeNode = nullptr;
 
-		return pos->Next;
+		return where->Next;
 	}
 
 	// 시작 요소에 value를 삽입한다.
@@ -142,9 +186,9 @@ public:
 
 	bool            contains(const T& value) const
 	{
-		for (auto iter = begin(); iter != end(); iter = iter->Next)
+		for (auto iter = begin(); iter != end(); ++iter)
 		{
-			if (iter->Data == value)
+			if (*iter == value)
 			{
 				return true;
 			}

@@ -77,21 +77,21 @@ int main()
 
 	cout << myTemplateList.front() << endl;
 
-	for (auto iter = myTemplateList.begin(); iter != myTemplateList.end(); iter = iter->Next)
+	for (auto iter = myTemplateList.begin(); iter != myTemplateList.end(); ++iter)
 	{
-		cout << iter->Data << ' ';
+		cout << *iter << ' ';
 	}
 	cout << endl;
 
 	auto iter3 = myTemplatelist2.insert_after(myTemplatelist2.begin(), 'c');
-	iter3 = iter3->Next;
+	++iter3;
 	iter3 = myTemplatelist2.insert_after(iter3, 'd');
 	myTemplatelist2.erase_after(iter3);
 
 
-	for (auto iter = myTemplatelist2.begin(); iter != myTemplatelist2.end(); iter = iter->Next)
+	for (auto iter = myTemplatelist2.begin(); iter != myTemplatelist2.end(); ++iter)
 	{
-		cout << iter->Data << ' ';
+		cout << *iter << ' ';
 	}
 	cout << endl;
 
@@ -99,9 +99,9 @@ int main()
 
 	MyTemplateSingleLinkedList<char> myTemplateList3(myTemplateList);
 
-	for (auto iter = myTemplateList3.begin(); iter != myTemplateList3.end(); iter = iter->Next)
+	for (auto iter = myTemplateList3.begin(); iter != myTemplateList3.end(); ++iter)
 	{
-		cout << iter->Data << ' ';
+		cout << *iter << ' ';
 	}
 	cout << endl;
 
@@ -116,21 +116,21 @@ int main()
 
 	cout << myStTemplateList.front().a << myStTemplateList.front().b << endl;
 
-	for (auto iter = myStTemplateList.begin(); iter != myStTemplateList.end(); iter = iter->Next)
+	for (auto iter = myStTemplateList.begin(); iter != myStTemplateList.end(); ++iter)
 	{
-		cout << iter->Data.a << iter->Data.b << ' ';
+		cout << iter->a << iter->b << ' ';
 	}
 	cout << endl;
 
 	auto iter4 = myStTemplatelist2.insert_after(myStTemplatelist2.begin(), {5,6});
-	iter4 = iter4->Next;
+	++iter4;
 	iter4 = myStTemplatelist2.insert_after(iter4, { 7,8 });
 	myStTemplatelist2.erase_after(iter4);
 
 
-	for (auto iter = myStTemplatelist2.begin(); iter != myStTemplatelist2.end(); iter= iter->Next)
+	for (auto iter = myStTemplatelist2.begin(); iter != myStTemplatelist2.end(); ++iter)
 	{
-		cout << iter->Data.a << iter->Data.b << ' ';
+		cout << iter->a << iter->b << ' ';
 	}
 	cout << endl;
 
@@ -138,9 +138,9 @@ int main()
 
 	MyTemplateSingleLinkedList<A> myStTemplateList3(myStTemplateList);
 
-	for (auto iter = myStTemplateList3.begin(); iter != myStTemplateList3.end(); iter = iter->Next)
+	for (auto iter = myStTemplateList3.begin(); iter != myStTemplateList3.end(); ++iter)
 	{
-		cout << iter->Data.a << iter->Data.b << ' ';
+		cout << iter->a << iter->b << ' ';
 	}
 	cout << endl;
 
@@ -155,21 +155,21 @@ int main()
 
 	cout << mylist.front() << endl;
 
-	for (auto iter = mylist.begin(); iter != mylist.end(); iter = iter->Next)
+	for (auto iter = mylist.begin(); iter != mylist.end(); iter = ++iter)
 	{
-		cout << iter->Data << ' ';
+		cout << *iter << ' ';
 	}
 	cout << endl;
 
 	auto iter2 = mylist2.insert_after(mylist2.begin(), 3);
-	iter2 = iter2->Next;
+	++iter2;
 	iter2 = mylist2.insert_after(iter2, 4);
 	mylist2.erase_after(iter2);
 
 
-	for (auto iter = mylist2.begin(); iter != mylist2.end(); iter = iter->Next)
+	for (auto iter = mylist2.begin(); iter != mylist2.end(); ++iter)
 	{
-		cout << iter->Data << ' ';
+		cout << *iter << ' ';
 	}
 	cout << endl;
 
@@ -177,9 +177,9 @@ int main()
 
 	MySingleLinkedList mylist3(mylist);
 
-	for (auto iter = mylist3.begin(); iter != mylist3.end(); iter = iter->Next)
+	for (auto iter = mylist3.begin(); iter != mylist3.end(); ++iter)
 	{
-		cout << iter->Data << ' ';
+		cout << *iter << ' ';
 	}
 	cout << endl;
 }
