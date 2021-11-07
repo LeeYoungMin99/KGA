@@ -6,6 +6,13 @@
 
 using namespace std;
 
+struct A
+{
+	A(int val1 = 0, int val2 = 0) { a = val1; b = val2; }
+	int a;
+	int b;
+};
+
 int main()
 {
 	forward_list<int> list;
@@ -60,13 +67,12 @@ int main()
 	}
 	cout << endl;
 
+	MyTemplateSingleLinkedList<char> myTemplateList;
+	MyTemplateSingleLinkedList<char> myTemplatelist2(5);
 
-	MyTemplateSingleLinkedList<int> myTemplateList;
-	MyTemplateSingleLinkedList<int> myTemplatelist2(5);
-
-	myTemplateList.push_front(1);
-	myTemplateList.push_front(2);
-	myTemplateList.push_front(3);
+	myTemplateList.push_front('a');
+	myTemplateList.push_front('b');
+	myTemplateList.push_front('c');
 	myTemplateList.pop_front();
 
 	cout << myTemplateList.front() << endl;
@@ -77,13 +83,13 @@ int main()
 	}
 	cout << endl;
 
-	auto iter3 = myTemplatelist2.insert_after(myTemplatelist2.begin(), 3);
+	auto iter3 = myTemplatelist2.insert_after(myTemplatelist2.begin(), 'c');
 	iter3 = iter3->Next;
-	iter3 = myTemplatelist2.insert_after(iter3, 4);
+	iter3 = myTemplatelist2.insert_after(iter3, 'd');
 	myTemplatelist2.erase_after(iter3);
 
 
-	for (auto iter = myTemplatelist2.begin(); iter != myTemplatelist2.end(); iter= iter->Next)
+	for (auto iter = myTemplatelist2.begin(); iter != myTemplatelist2.end(); iter = iter->Next)
 	{
 		cout << iter->Data << ' ';
 	}
@@ -91,11 +97,50 @@ int main()
 
 	cout << boolalpha << myTemplatelist2.empty() << endl;
 
-	MyTemplateSingleLinkedList<int> myTemplateList3(myTemplateList);
+	MyTemplateSingleLinkedList<char> myTemplateList3(myTemplateList);
 
 	for (auto iter = myTemplateList3.begin(); iter != myTemplateList3.end(); iter = iter->Next)
 	{
 		cout << iter->Data << ' ';
+	}
+	cout << endl;
+
+
+	MyTemplateSingleLinkedList<A> myStTemplateList;
+	MyTemplateSingleLinkedList<A> myStTemplatelist2(5);
+
+	myStTemplateList.push_front({1,2});
+	myStTemplateList.push_front({3,4});
+	myStTemplateList.push_front({5,6});
+	myStTemplateList.pop_front();
+
+	cout << myStTemplateList.front().a << myStTemplateList.front().b << endl;
+
+	for (auto iter = myStTemplateList.begin(); iter != myStTemplateList.end(); iter = iter->Next)
+	{
+		cout << iter->Data.a << iter->Data.b << ' ';
+	}
+	cout << endl;
+
+	auto iter4 = myStTemplatelist2.insert_after(myStTemplatelist2.begin(), {5,6});
+	iter4 = iter4->Next;
+	iter4 = myStTemplatelist2.insert_after(iter4, { 7,8 });
+	myStTemplatelist2.erase_after(iter4);
+
+
+	for (auto iter = myStTemplatelist2.begin(); iter != myStTemplatelist2.end(); iter= iter->Next)
+	{
+		cout << iter->Data.a << iter->Data.b << ' ';
+	}
+	cout << endl;
+
+	cout << boolalpha << myStTemplatelist2.empty() << endl;
+
+	MyTemplateSingleLinkedList<A> myStTemplateList3(myStTemplateList);
+
+	for (auto iter = myStTemplateList3.begin(); iter != myStTemplateList3.end(); iter = iter->Next)
+	{
+		cout << iter->Data.a << iter->Data.b << ' ';
 	}
 	cout << endl;
 

@@ -5,7 +5,7 @@ class MyTemplateSingleLinkedList
 {
 	struct Node
 	{
-		Node(T data = 0, Node* next = nullptr)
+		Node(T data = {}, Node* next = nullptr)
 			:Data{ data }, Next{ next }	{ }
 		Node(const Node&) = delete;
 		Node& operator=(const Node&) = delete;
@@ -14,7 +14,7 @@ class MyTemplateSingleLinkedList
 			Next = nullptr;
 		}
 
-		T     Data = 0;
+		T     Data = {};
 		Node* Next = nullptr;
 	};
 
@@ -31,7 +31,7 @@ public:
 	{
 		for (size_t i = 0; i < count; ++i)
 		{
-			push_front(0);
+			push_front({});
 		}
 	}
 
