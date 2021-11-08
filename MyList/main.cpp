@@ -1,10 +1,23 @@
 #include <forward_list>
+#include <list>
 #include <iostream>
 
 #include "MySingleLinkedList.h"
 #include "MyTemplateSingleLinkedList.h"
+#include "CircularSingleLinkedList.h"
 
 using namespace std;
+
+void print(const CircularSingleLinkedList& mcList)
+{
+	for (auto iter = mcList.before_head(); iter != mcList.tail();)
+	{
+		iter = iter->Next;
+		cout << iter->Data << ' ';
+	}
+
+	cout << endl;
+}
 
 struct A
 {
@@ -15,53 +28,55 @@ struct A
 
 int main()
 {
-	forward_list<int> list;
-	forward_list<int> list2(5);
+#pragma region forwardList
 
-	list.push_front(1);
+	forward_list<int> forwardList;
+	forward_list<int> forwardList2(5);
+
+	forwardList.push_front(1);
 	// [1]
-	list.push_front(2);
+	forwardList.push_front(2);
 	// [2] -> [1]
-	list.push_front(3);
+	forwardList.push_front(3);
 	// [3] -> [2] -> [1]
-	list.pop_front();
+	forwardList.pop_front();
 	// [2] -> [1]
 
 	// 2
-	cout << list.front() << endl;
+	cout << forwardList.front() << endl;
 
 	// 2 1
-	for (int elem : list)
+	for (int elem : forwardList)
 	{
 		cout << elem << ' ';
 	}
 	cout << endl;
 
 	// [0] -> [0] -> [0] -> [0] -> [0]
-	auto iter = list2.insert_after(list2.begin(), 3);
+	auto iter = forwardList2.insert_after(forwardList2.begin(), 3);
 	// [0] -> [3] -> [0] -> [0] -> [0] -> [0] 
 	//		         iter
 
 	++iter;
 
-	iter = list2.insert_after(iter, 4);
+	iter = forwardList2.insert_after(iter, 4);
 	// [0] -> [3] -> [0] -> [4] -> [0] -> [0] -> [0]
 	//						iter
 
-	list2.erase_after(iter);
+	forwardList2.erase_after(iter);
 	// [0] -> [3] -> [0] -> [4] -> [0] -> [0]
 
-	for (int elem : list2)
+	for (int elem : forwardList2)
 	{
 		cout << elem << ' ';
 	}
 	cout << endl;
 
-	cout << boolalpha << list2.empty() << endl;
+	cout << boolalpha << forwardList2.empty() << endl;
 
-	forward_list<int> list3(list);
+	forward_list<int> forwardlist3(forwardList);
 
-	for (int elem : list3)
+	for (int elem : forwardlist3)
 	{
 		cout << elem << ' ';
 	}
@@ -109,20 +124,20 @@ int main()
 	MyTemplateSingleLinkedList<A> myStTemplateList;
 	MyTemplateSingleLinkedList<A> myStTemplatelist2(5);
 
-	myStTemplateList.push_front({1,2});
-	myStTemplateList.push_front({3,4});
-	myStTemplateList.push_front({5,6});
+	myStTemplateList.push_front({ 1,2 });
+	myStTemplateList.push_front({ 3,4 });
+	myStTemplateList.push_front({ 5,6 });
 	myStTemplateList.pop_front();
 
 	cout << myStTemplateList.front().a << myStTemplateList.front().b << endl;
 
 	for (auto iter = myStTemplateList.begin(); iter != myStTemplateList.end(); ++iter)
 	{
-		cout << iter->a << iter->b << ' ';
+		cout << "{" << iter->a << ", " << iter->b << "}" << ' ';
 	}
 	cout << endl;
 
-	auto iter4 = myStTemplatelist2.insert_after(myStTemplatelist2.begin(), {5,6});
+	auto iter4 = myStTemplatelist2.insert_after(myStTemplatelist2.begin(), { 5,6 });
 	++iter4;
 	iter4 = myStTemplatelist2.insert_after(iter4, { 7,8 });
 	myStTemplatelist2.erase_after(iter4);
@@ -130,7 +145,7 @@ int main()
 
 	for (auto iter = myStTemplatelist2.begin(); iter != myStTemplatelist2.end(); ++iter)
 	{
-		cout << iter->a << iter->b << ' ';
+		cout << "{" << iter->a << ", " << iter->b << "}" << ' ';
 	}
 	cout << endl;
 
@@ -140,7 +155,7 @@ int main()
 
 	for (auto iter = myStTemplateList3.begin(); iter != myStTemplateList3.end(); ++iter)
 	{
-		cout << iter->a << iter->b << ' ';
+		cout << "{" << iter->a << ", " << iter->b << "}" << ' ';
 	}
 	cout << endl;
 
@@ -182,4 +197,161 @@ int main()
 		cout << *iter << ' ';
 	}
 	cout << endl;
+
+#pragma endregion
+
+#pragma region List
+
+
+#pragma endregion
+
+#pragma region CircularSingleLinkedList
+
+
+	cout << "여기부터" << endl;
+	CircularSingleLinkedList mcList;
+	CircularSingleLinkedList mcList6(5);
+
+
+	//mcList.push_front(1);
+	//// [1]
+	//mcList.push_front(2);
+	//// [2] -> [1]
+	//mcList.push_front(3);
+	//print(mcList);
+	//// [3] -> [2] -> [1]
+	//mcList.push_front(4);
+	//// [4] -> [3] -> [2] -> [1]
+
+	mcList.push_back(4);
+	mcList.push_back(3);
+	mcList.push_back(2);
+	mcList.push_back(1);
+	//mcList.pop_front();
+	//// [2] -> [1]
+
+
+	auto testiter = mcList.head()->Next->Next->Next;
+
+	CircularSingleLinkedList mcList1 = mcList;
+	CircularSingleLinkedList mcList2 = mcList;
+	CircularSingleLinkedList mcList3 = mcList;
+	CircularSingleLinkedList mcList4 = mcList;
+	CircularSingleLinkedList mcList5;
+	mcList5 = mcList;
+
+	print(mcList);
+	cout << "4 3 2 1 예상" << endl;
+	cout << "before_tail : " << mcList.before_tail()->Data << endl;
+	cout << "       tail : " << mcList.tail()->Data << endl;
+	cout << "       head : " << mcList.head()->Data << endl;
+	cout << endl;
+
+	testiter = mcList1.before_head();
+	mcList1.erase_after(testiter);
+
+	print(mcList1);
+	cout << "3 2 1 예상" << endl;
+	cout << "before_tail : " << mcList1.before_tail()->Data << endl;
+	cout << "       tail : " << mcList1.tail()->Data << endl;
+	cout << "       head : " << mcList1.head()->Data << endl;
+
+	testiter = mcList2.before_head()->Next;
+	mcList2.erase_after(testiter);
+
+	print(mcList2);
+	cout << "4 2 1 예상" << endl;
+	cout << "before_tail : " << mcList2.before_tail()->Data << endl;
+	cout << "       tail : " << mcList2.tail()->Data << endl;
+	cout << "       head : " << mcList2.head()->Data << endl;
+
+	testiter = mcList3.before_head()->Next->Next;
+	mcList3.erase_after(testiter);
+
+	print(mcList3);
+	cout << "4 3 1 예상" << endl;
+	cout << "before_tail : " << mcList3.before_tail()->Data << endl;
+	cout << "       tail : " << mcList3.tail()->Data << endl;
+	cout << "       head : " << mcList3.head()->Data << endl;
+
+	testiter = mcList4.before_head()->Next->Next->Next;
+	mcList4.erase_after(testiter);
+
+	print(mcList4);
+	cout << "4 3 2 예상" << endl;
+	cout << "before_tail : " << mcList4.before_tail()->Data << endl;
+	cout << "       tail : " << mcList4.tail()->Data << endl;
+	cout << "       head : " << mcList4.head()->Data << endl;
+
+	testiter = mcList5.before_head()->Next->Next->Next->Next;
+
+	print(mcList5);
+	cout << "before_tail : " << mcList5.before_tail()->Data << endl;
+	cout << "       tail : " << mcList5.tail()->Data << endl;
+	cout << "       head : " << mcList5.head()->Data << endl;
+
+	mcList5.erase_after(testiter);
+
+	print(mcList5);
+	cout << "3 2 1 예상" << endl;
+	cout << "before_tail : " << mcList5.before_tail()->Data << endl;
+	cout << "       tail : " << mcList5.tail()->Data << endl;
+	cout << "       head : " << mcList5.head()->Data << endl;
+
+	print(mcList);
+
+
+	auto mcIter = mcList.head();
+	do
+	{
+		std::cout << mcIter->Data << "->";
+		mcIter = mcIter->Next;
+	} while (mcIter != mcList.tail());
+	std::cout << mcIter->Data << std::endl;
+
+	cout << boolalpha << mcList.contains(1) << endl;;
+	cout << boolalpha << mcList.contains(2) << endl;;
+	cout << boolalpha << mcList.contains(3) << endl;;
+	cout << boolalpha << mcList.contains(4) << endl;;
+	cout << boolalpha << mcList.contains(5) << endl;;
+
+
+	cout << mcList.front() << endl;
+	cout << mcList.back() << endl;
+	mcList.clear();
+	cout << boolalpha << mcList.empty() << endl;
+	cout << boolalpha << mcList.contains(1) << endl;;
+
+
+	mcList.push_back(1);
+	cout << mcList.back() << endl;
+	cout << mcList.front() << endl;
+
+
+	// [0] -> [0] -> [0] -> [0] -> [0]
+	auto mcIter2 = mcList6.insert_after(mcList6.head(), 3);
+	// [0] -> [3] -> [0] -> [0] -> [0] -> [0]
+	//		         iter
+
+	mcIter2 = mcIter2->Next;
+
+	mcIter2 = mcList6.insert_after(mcIter2, 4);
+	// [0] -> [3] -> [0] -> [4] -> [0] -> [0] -> [0]
+	//						iter
+
+	mcList6.erase_after(mcIter2);
+
+	// [0] -> [3] -> [0] -> [4] -> [0] -> [0]
+	print(mcList6);
+	cout << endl;
+
+	cout << boolalpha << mcList6.empty() << endl;
+
+	CircularSingleLinkedList mcList7(mcList6);
+
+	print(mcList7);
+	cout << endl;
+
+#pragma endregion
+
 }
