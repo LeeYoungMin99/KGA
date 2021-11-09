@@ -145,6 +145,7 @@
     <ClInclude Include="MySingleLinkedList.h" />
     <ClInclude Include="MyTemplateSingleLinkedList.h" />
     <ClInclude Include="MyDoubleLinkedList.h" />
+    <ClInclude Include="MyCircularSingleLinkedList.h" />
     <ClInclude Include="CircularSingleLinkedList.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

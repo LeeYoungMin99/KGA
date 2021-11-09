@@ -1,5 +1,7 @@
 #pragma once
 
+#include <algorithm>
+
 class MyDoubleLinkedList
 {
 public:
@@ -29,16 +31,47 @@ public:
 	}
 
 	// count만큼의 요소를 갖고 있는 컨테이너를 만드는 생성자
-	explicit MyDoubleLinkedList(size_t count);
+	explicit MyDoubleLinkedList(size_t count)
+		:MyDoubleLinkedList()
+	{
+		for (size_t i = 0; i < count; ++i)
+		{
+			push_back(0);
+		}
+	}
 
 	// 복사 생성자.
-	MyDoubleLinkedList(const MyDoubleLinkedList& other);
+	MyDoubleLinkedList(const MyDoubleLinkedList& other)
+		:MyDoubleLinkedList()
+	{
+		for (const Node* iter = other.begin(); iter != other.end(); iter = iter->Next)
+		{
+			push_back(iter->Data);
+		}
+	}
 
 	// 할당 연산자
-	MyDoubleLinkedList& operator=(const MyDoubleLinkedList& rhs);
+	MyDoubleLinkedList& operator=(const MyDoubleLinkedList& rhs)
+	{
+		if (this != &rhs)
+		{
+			MyDoubleLinkedList temp(rhs);
+			std::swap(_head, temp._head);
+			std::swap(_end, temp._end);
+			std::swap(_size, temp._size);
+		}
+
+		return *this;
+	}
 
 	// 소멸자
-	~MyDoubleLinkedList();
+	~MyDoubleLinkedList()
+	{
+		clear();
+
+		_head = nullptr;
+		_end = nullptr;
+	}
 
 	// 첫 번째 요소를 반환한다.
 	int& front() { return begin()->Data; }
@@ -73,26 +106,41 @@ public:
 		return newNode;
 	}
 
-	// pos 다음 요소를 삭제한다.
+	// pos 를 삭제한다.
 	// 삭제된 요소의 다음 요소를 가리키는 반복자를 반환한다.
 	// 아무 요소도 없으면 end()를 반환한다.
 	Node* erase(Node* pos)
 	{
-		Node* removed = pos->Next;
+		if (empty() || end())
+		{
+			return end();
+		}
 
+		Node* nextNode = pos->Next;
+		Node* prevNode = pos->Prev;
+
+		nextNode->Prev = prevNode;
+		prevNode->Next = nextNode;
+
+		pos->Next = nullptr;
+		pos->Prev = nullptr;
+
+		--_size;
+
+		return nextNode;
 	}
 
 	// 시작에 value를 삽입한다.
-	void            push_front(int value);
+	void            push_front(int value) { insert(begin(), value); }
 
 	// 끝에 value를 삽입한다.
-	void            push_back(int value);
+	void            push_back(int value) { insert(end(), value); }
 
 	// 시작 요소를 제거한다.
-	void            pop_front();
+	void            pop_front() { erase(begin()); }
 
 	// 끝 요소를 제거한다.
-	void            pop_back();
+	void            pop_back() { erase(end()->Prev); }
 
 	// 컨테이너가 비었는지 판단한다.
 	bool            empty() const { return _size == 0; }
@@ -101,10 +149,28 @@ public:
 	size_t          size() const { return _size; };
 
 	// 컨테이너를 비워버린다.
-	void            clear();
+	void            clear()
+	{
+		while (false == empty())
+		{
+			pop_front();
+		}
+	}
 
 	// 해당 value가 있는지 체크한다.
-	bool            contains(int value) const;
+	bool            contains(int value) const
+	{
+		for (const Node* iter = begin(); iter != end(); iter = iter->Next)
+		{
+			if (value == iter->Data)
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 private:
 	Node* _end = new Node;
 	Node* _head = new Node;

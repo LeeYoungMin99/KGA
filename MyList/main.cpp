@@ -4,11 +4,11 @@
 
 #include "MySingleLinkedList.h"
 #include "MyTemplateSingleLinkedList.h"
-#include "CircularSingleLinkedList.h"
+#include "MyCircularSingleLinkedList.h"
 
 using namespace std;
 
-void print(const CircularSingleLinkedList& mcList)
+void print(const MyCircularSingleLinkedList& mcList)
 {
 	for (auto iter = mcList.before_head(); iter != mcList.tail();)
 	{
@@ -209,8 +209,8 @@ int main()
 
 
 	cout << "여기부터" << endl;
-	CircularSingleLinkedList mcList;
-	CircularSingleLinkedList mcList6(5);
+	MyCircularSingleLinkedList mcList;
+	MyCircularSingleLinkedList mcList6(5);
 
 
 	//mcList.push_front(1);
@@ -233,11 +233,11 @@ int main()
 
 	auto testiter = mcList.head()->Next->Next->Next;
 
-	CircularSingleLinkedList mcList1 = mcList;
-	CircularSingleLinkedList mcList2 = mcList;
-	CircularSingleLinkedList mcList3 = mcList;
-	CircularSingleLinkedList mcList4 = mcList;
-	CircularSingleLinkedList mcList5;
+	MyCircularSingleLinkedList mcList1 = mcList;
+	MyCircularSingleLinkedList mcList2 = mcList;
+	MyCircularSingleLinkedList mcList3 = mcList;
+	MyCircularSingleLinkedList mcList4 = mcList;
+	MyCircularSingleLinkedList mcList5;
 	mcList5 = mcList;
 
 	print(mcList);
@@ -347,7 +347,7 @@ int main()
 
 	cout << boolalpha << mcList6.empty() << endl;
 
-	CircularSingleLinkedList mcList7(mcList6);
+	MyCircularSingleLinkedList mcList7(mcList6);
 
 	print(mcList7);
 	cout << endl;
