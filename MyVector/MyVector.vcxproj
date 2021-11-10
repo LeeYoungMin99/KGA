@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClInclude Include="MyVector.h" />
     <ClInclude Include="MyTemplateVector.h" />
+    <ClInclude Include="MyStack.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />

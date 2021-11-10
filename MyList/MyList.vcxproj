@@ -147,6 +147,7 @@
     <ClInclude Include="MyDoubleLinkedList.h" />
     <ClInclude Include="MyCircularSingleLinkedList.h" />
     <ClInclude Include="CircularSingleLinkedList.h" />
+    <ClInclude Include="MyStack.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
