@@ -142,6 +142,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="MyQueue.h" />
     <ClInclude Include="MySingleLinkedList.h" />
     <ClInclude Include="MyTemplateSingleLinkedList.h" />
     <ClInclude Include="MyDoubleLinkedList.h" />
