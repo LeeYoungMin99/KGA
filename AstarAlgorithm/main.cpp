@@ -18,6 +18,38 @@
 using namespace std;
 using namespace chrono;
 
+int map[MAP_SIZE_X][MAP_SIZE_Y] = {
+	{ 0,0,0,0,0, 0, 0,0,0,0,0 },
+	{ 0,2,2,2,2, 0, 2,2,2,2,0 },
+	{ 0,0,0,0,0, 2, 0,0,0,0,0 },
+	{ 0,0,0,0,0, 2, 0,0,0,0,0 },
+	{ 0,2,2,2,2, 0, 2,2,2,2,0 },
+
+	{ 0,0,0,0,1, 2, 3,0,0,0,0 },
+
+	{ 0,2,2,2,2, 0, 2,2,2,2,0 },
+	{ 0,0,0,0,0, 2, 0,0,0,0,0 },
+	{ 0,0,0,0,0, 2, 0,0,0,0,0 },
+	{ 0,2,2,2,2, 0 ,2,2,2,2,0 },
+	{ 0,0,0,0,0, 0, 0,0,0,0,0 }
+};
+
+int map2[MAP_SIZE_X][MAP_SIZE_Y] = {
+	{ 0,0,0,0,0, 0, 0,0,0,0,0 },
+	{ 0,2,2,2,2, 0, 2,2,2,2,0 },
+	{ 0,0,0,0,0, 2, 0,0,0,0,0 },
+	{ 0,0,0,0,0, 2, 0,0,0,0,0 },
+	{ 0,2,2,2,2, 0, 2,2,2,2,0 },
+
+	{ 0,0,0,0,1, 2, 3,0,0,0,0 },
+
+	{ 0,2,2,2,2, 0, 2,2,2,2,0 },
+	{ 0,0,0,0,0, 2, 0,0,0,0,0 },
+	{ 0,0,0,0,0, 2, 0,0,0,0,0 },
+	{ 0,2,2,2,2, 0 ,2,2,2,2,0 },
+	{ 0,0,0,0,0, 0, 0,0,0,0,0 }
+};
+
 struct Pos
 {
 	int X;
@@ -28,26 +60,26 @@ struct Pos
 	bool operator!=(const Pos& other) const { return !(*this == other); }
 };
 
-//void PrintMap()
-//{
-//	for (int r = 0; r < MAP_SIZE_Y; ++r)
-//	{
-//		for (int c = 0; c < MAP_SIZE_X; ++c)
-//		{
-//			if (map[r][c] == 0)
-//				cout << " ";
-//			else if (map[r][c] == 1)
-//				cout << "S";
-//			else if (map[r][c] == 2)
-//				cout << "B";
-//			else if (map[r][c] == 3)
-//				cout << "E";
-//			else if (map[r][c] == 4)
-//				cout << "P";
-//		}
-//		cout << endl;
-//	}
-//}
+void PrintMap()
+{
+	for (int r = 0; r < MAP_SIZE_Y; ++r)
+	{
+		for (int c = 0; c < MAP_SIZE_X; ++c)
+		{
+			if (map[r][c] == 0)
+				cout << " ";
+			else if (map[r][c] == 1)
+				cout << "S";
+			else if (map[r][c] == 2)
+				cout << "B";
+			else if (map[r][c] == 3)
+				cout << "E";
+			else if (map[r][c] == 4)
+				cout << "P";
+		}
+		cout << endl;
+	}
+}
 
 float Euclidean(Pos a, Pos b)
 {
@@ -68,22 +100,6 @@ float dg[] = { STR,STR,STR,STR,DIA,DIA,DIA,DIA };
 
 void astar(Pos start, Pos end)
 {
-	int map[MAP_SIZE_X][MAP_SIZE_Y] = {
-		{ 0,0,0,0,0, 0, 0,0,0,0,0 },
-		{ 0,2,2,2,2, 0, 2,2,2,2,0 },
-		{ 0,0,0,0,0, 2, 0,0,0,0,0 },
-		{ 0,0,0,0,0, 2, 0,0,0,0,0 },
-		{ 0,2,2,2,2, 0, 2,2,2,2,0 },
-
-		{ 0,0,0,0,1, 2, 3,0,0,0,0 },
-
-		{ 0,2,2,2,2, 0, 2,2,2,2,0 },
-		{ 0,0,0,0,0, 2, 0,0,0,0,0 },
-		{ 0,0,0,0,0, 2, 0,0,0,0,0 },
-		{ 0,2,2,2,2, 0 ,2,2,2,2,0 },
-		{ 0,0,0,0,0, 0, 0,0,0,0,0 }
-	};
-
 	vector<vector<float>> f;
 	for (int i = 0; i < MAP_SIZE_Y; ++i)
 		f.emplace_back(MAP_SIZE_X, INF);
@@ -171,21 +187,6 @@ void astar(Pos start, Pos end)
 
 void astar2(Pos start, Pos end)
 {
-	int map2[MAP_SIZE_X][MAP_SIZE_Y] = {
-		{ 0,0,0,0,0, 0, 0,0,0,0,0 },
-		{ 0,2,2,2,2, 0, 2,2,2,2,0 },
-		{ 0,0,0,0,0, 2, 0,0,0,0,0 },
-		{ 0,0,0,0,0, 2, 0,0,0,0,0 },
-		{ 0,2,2,2,2, 0, 2,2,2,2,0 },
-
-		{ 0,0,0,0,1, 2, 3,0,0,0,0 },
-
-		{ 0,2,2,2,2, 0, 2,2,2,2,0 },
-		{ 0,0,0,0,0, 2, 0,0,0,0,0 },
-		{ 0,0,0,0,0, 2, 0,0,0,0,0 },
-		{ 0,2,2,2,2, 0 ,2,2,2,2,0 },
-		{ 0,0,0,0,0, 0, 0,0,0,0,0 }
-	};
 
 	vector<vector<float>> f;
 	for (int i = 0; i < MAP_SIZE_Y; ++i)
@@ -259,18 +260,16 @@ void astar2(Pos start, Pos end)
 
 int main()
 {
-	//PrintMap();
+	PrintMap();
 
 	puts("");
 
 	auto start = timeGetTime();
-	for (int i = 0; i < 100000; ++i)
-		astar({ START_X, START_Y }, { END_X, END_Y });
+	astar({ START_X, START_Y }, { END_X, END_Y });
 	auto end = timeGetTime();
 
 	auto start1 = timeGetTime();
-	for (int i = 0; i < 100000; ++i)
-		astar2({ START_X, START_Y }, { END_X, END_Y });
+	astar2({ START_X, START_Y }, { END_X, END_Y });
 	auto end1 = timeGetTime();
 
 	unsigned long bit = end - start;
@@ -279,5 +278,5 @@ int main()
 	cout << "   bit : " << bit << endl << endl;
 	cout << "normal : " << normal << endl << endl;
 
-	//PrintMap();
+	PrintMap();
 }
