@@ -4,12 +4,13 @@
 #include <bitset>
 #include <chrono>
 #include <Windows.h>
+#include <stack>
 #pragma comment(lib, "winmm.lib")
 
-#define START_X 4
-#define START_Y 5
-#define END_X   6
-#define END_Y   5
+#define START_X 0
+#define START_Y 0
+#define END_X   4
+#define END_Y   2
 #define MAP_SIZE_X 11
 #define MAP_SIZE_Y 11
 
@@ -17,6 +18,38 @@
 
 using namespace std;
 using namespace chrono;
+
+int map[MAP_SIZE_X][MAP_SIZE_Y] = {
+	{ 1,0,0,0,0, 0, 0,0,0,0,0 },
+	{ 0,0,2,0,0, 0, 0,0,0,0,0 },
+	{ 0,0,0,0,3, 0, 0,0,0,0,0 },
+	{ 0,0,0,0,0, 0, 0,0,0,0,0 },
+	{ 0,0,0,0,0, 0, 0,0,0,0,0 },
+
+	{ 0,0,0,0,0, 0, 0,0,0,0,0 },
+
+	{ 0,0,0,0,0, 0, 0,0,0,0,0 },
+	{ 0,0,0,0,0, 0, 0,0,0,0,0 },
+	{ 0,0,0,0,0, 0, 0,0,0,0,0 },
+	{ 0,0,0,0,0, 0 ,0,0,0,0,0 },
+	{ 0,0,0,0,0, 0, 0,0,0,0,0 }
+};
+
+int map2[MAP_SIZE_X][MAP_SIZE_Y] = {
+	{ 0,0,0,0,0, 0, 0,0,0,0,0 },
+	{ 0,2,2,2,2, 0, 2,2,2,2,0 },
+	{ 0,0,0,0,0, 2, 0,0,0,0,0 },
+	{ 0,0,0,0,0, 2, 0,0,0,0,0 },
+	{ 0,2,2,2,2, 0, 2,2,2,2,0 },
+
+	{ 0,0,0,0,1, 2, 3,0,0,0,0 },
+
+	{ 0,2,2,2,2, 0, 2,2,2,2,0 },
+	{ 0,0,0,0,0, 2, 0,0,0,0,0 },
+	{ 0,0,0,0,0, 2, 0,0,0,0,0 },
+	{ 0,2,2,2,2, 0 ,2,2,2,2,0 },
+	{ 0,0,0,0,0, 0, 0,0,0,0,0 }
+};
 
 struct Pos
 {
@@ -28,26 +61,28 @@ struct Pos
 	bool operator!=(const Pos& other) const { return !(*this == other); }
 };
 
-//void PrintMap()
-//{
-//	for (int r = 0; r < MAP_SIZE_Y; ++r)
-//	{
-//		for (int c = 0; c < MAP_SIZE_X; ++c)
-//		{
-//			if (map[r][c] == 0)
-//				cout << " ";
-//			else if (map[r][c] == 1)
-//				cout << "S";
-//			else if (map[r][c] == 2)
-//				cout << "B";
-//			else if (map[r][c] == 3)
-//				cout << "E";
-//			else if (map[r][c] == 4)
-//				cout << "P";
-//		}
-//		cout << endl;
-//	}
-//}
+void PrintMap()
+{
+	for (int r = 0; r < MAP_SIZE_Y; ++r)
+	{
+		for (int c = 0; c < MAP_SIZE_X; ++c)
+		{
+			if (map[r][c] == 0)
+				cout << " ";
+			else if (map[r][c] == 1)
+				cout << "S";
+			else if (map[r][c] == 2)
+				cout << "B";
+			else if (map[r][c] == 3)
+				cout << "E";
+			else if (map[r][c] == 4)
+				cout << "P";
+			else if (map[r][c] == 5)
+				cout << "M";
+		}
+		cout << endl;
+	}
+}
 
 float Euclidean(Pos a, Pos b)
 {
@@ -66,24 +101,8 @@ int dy[] = { -1, 1,0, 0 ,-1, 1,-1,1 };
 int dx[] = { 0, 0,-1, 1 ,-1,-1, 1,1 };
 float dg[] = { STR,STR,STR,STR,DIA,DIA,DIA,DIA };
 
-void astar(Pos start, Pos end)
+stack<Pos> astar(Pos start, Pos end)
 {
-	int map[MAP_SIZE_X][MAP_SIZE_Y] = {
-		{ 0,0,0,0,0, 0, 0,0,0,0,0 },
-		{ 0,2,2,2,2, 0, 2,2,2,2,0 },
-		{ 0,0,0,0,0, 2, 0,0,0,0,0 },
-		{ 0,0,0,0,0, 2, 0,0,0,0,0 },
-		{ 0,2,2,2,2, 0, 2,2,2,2,0 },
-
-		{ 0,0,0,0,1, 2, 3,0,0,0,0 },
-
-		{ 0,2,2,2,2, 0, 2,2,2,2,0 },
-		{ 0,0,0,0,0, 2, 0,0,0,0,0 },
-		{ 0,0,0,0,0, 2, 0,0,0,0,0 },
-		{ 0,2,2,2,2, 0 ,2,2,2,2,0 },
-		{ 0,0,0,0,0, 0, 0,0,0,0,0 }
-	};
-
 	vector<vector<float>> f;
 	for (int i = 0; i < MAP_SIZE_Y; ++i)
 		f.emplace_back(MAP_SIZE_X, INF);
@@ -160,32 +179,21 @@ void astar(Pos start, Pos end)
 		}
 	}
 
+	stack<Pos> pathS = {};
 	Pos curr = end;
 	while (curr != start)
 	{
 		map[curr.Y][curr.X] = 4;
 
+		pathS.push(curr);
 		curr = path[curr.Y][curr.X];
 	}
+
+	return pathS;
 }
 
 void astar2(Pos start, Pos end)
 {
-	int map2[MAP_SIZE_X][MAP_SIZE_Y] = {
-		{ 0,0,0,0,0, 0, 0,0,0,0,0 },
-		{ 0,2,2,2,2, 0, 2,2,2,2,0 },
-		{ 0,0,0,0,0, 2, 0,0,0,0,0 },
-		{ 0,0,0,0,0, 2, 0,0,0,0,0 },
-		{ 0,2,2,2,2, 0, 2,2,2,2,0 },
-
-		{ 0,0,0,0,1, 2, 3,0,0,0,0 },
-
-		{ 0,2,2,2,2, 0, 2,2,2,2,0 },
-		{ 0,0,0,0,0, 2, 0,0,0,0,0 },
-		{ 0,0,0,0,0, 2, 0,0,0,0,0 },
-		{ 0,2,2,2,2, 0 ,2,2,2,2,0 },
-		{ 0,0,0,0,0, 0, 0,0,0,0,0 }
-	};
 
 	vector<vector<float>> f;
 	for (int i = 0; i < MAP_SIZE_Y; ++i)
@@ -259,25 +267,24 @@ void astar2(Pos start, Pos end)
 
 int main()
 {
-	//PrintMap();
+	PrintMap();
 
 	puts("");
 
-	auto start = timeGetTime();
-	for (int i = 0; i < 100000; ++i)
-		astar({ START_X, START_Y }, { END_X, END_Y });
-	auto end = timeGetTime();
+	stack<Pos> path = astar({ START_X, START_Y }, { END_X, END_Y });
 
-	auto start1 = timeGetTime();
-	for (int i = 0; i < 100000; ++i)
-		astar2({ START_X, START_Y }, { END_X, END_Y });
-	auto end1 = timeGetTime();
+	PrintMap();
 
-	unsigned long bit = end - start;
-	unsigned long normal = end1 - start1;
+	Pos curr = { START_X, START_Y };
+	map[START_Y][START_X] = 5;
+	while (path.empty() == false)
+	{
+		map[curr.Y][curr.X] = 0;
 
-	cout << "   bit : " << bit << endl << endl;
-	cout << "normal : " << normal << endl << endl;
+		curr = path.top();
+		map[path.top().Y][path.top().X] = 5;
+		path.pop();
 
-	//PrintMap();
+		PrintMap();
+	}
 }
