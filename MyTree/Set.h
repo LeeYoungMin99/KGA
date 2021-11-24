@@ -8,17 +8,18 @@
 
 using namespace std;
 
+template<typename T>
 class Set
 {
 	struct Node
 	{
-		Node(int data = 0, Node* parent = nullptr, Node* left = nullptr, Node* right = nullptr)
+		Node(const T& data, Node* parent = nullptr, Node* left = nullptr, Node* right = nullptr)
 			:Data{ data }, Parent{ parent }, Left{ left }, Right{ right }{}
 		Node(const Node& other) = delete;
 		Node& operator=(const Node& rhs) = delete;
 		~Node() { Parent = Left = Right = nullptr; }
 
-		int		Data = 0;
+		T		Data;
 		Node* Parent = nullptr;
 		Node* Left = nullptr;
 		Node* Right = nullptr;
@@ -26,6 +27,11 @@ class Set
 
 
 public:
+	~Set()
+	{
+		clear();
+	}
+
 	int	height() const
 	{
 		if (empty())
@@ -36,7 +42,7 @@ public:
 		queue<Node*> q;
 		q.push(_root);
 
-		int h = 0;
+		int h = -1;
 
 		while (false == q.empty())
 		{
@@ -115,7 +121,7 @@ public:
 	}
 
 	// 트리에 값을 삽입한다. insert
-	pair<Node*, bool>	insert(const int& value)
+	pair<Node*, bool>	insert(const T& value)
 	{
 		if (empty())
 		{
@@ -187,6 +193,7 @@ public:
 			if (pos->Left == nullptr)
 			{
 				_root = pos->Right;
+				_root->Parent = nullptr;
 
 				delete pos;
 				pos = nullptr;
@@ -198,6 +205,7 @@ public:
 			else if(pos->Right == nullptr)
 			{
 				_root = pos->Left;
+				_root->Parent = nullptr;
 
 				delete pos;
 				pos = nullptr;
@@ -222,7 +230,7 @@ public:
 		}
 
 		// 자식이 없을때 => 단말 노드일떄
-		if (pos->Left == nullptr || pos->Right == nullptr)
+		if (pos->Left == nullptr && pos->Right == nullptr)
 		{
 			if (pos->Parent->Left == pos)
 			{
@@ -291,11 +299,11 @@ public:
 		{
 			successor = successor->Right;
 		}
-
+		
 		swap(pos->Data, successor->Data);
 		
 		erase(successor);
-
+		
 		return;
 
 		Node* successor2 = pos->Right;
@@ -305,14 +313,14 @@ public:
 			successor2 = successor2->Left;
 		}
 
-		swap(pos->Data, successor->Data);
+		swap(pos->Data, successor2->Data);
 
-		erase(successor);
+		erase(successor2);
 
 		return;
 	}
 
-	size_t				erase(int value)
+	size_t				erase(const T& value)
 	{
 		Node* removed = find(value);
 		if (removed == nullptr)
@@ -327,12 +335,12 @@ public:
 
 	// 트리에서 특정 값을 찾는다. find
 	//원래는 못찾으면 end()를 반환하지만 우리는 nullptr을 반환
-	Node* find(int value)
+	Node* find(const T& value)
 	{
 		return const_cast<Node*>(static_cast<const Set&>(*this).find(value));
 	}
 
-	const Node* find(int value) const
+	const Node* find(const T& value) const
 	{
 		const Node* result = _root;
 
@@ -419,7 +427,7 @@ private:
 			return;
 		}
 
-		cout << node << " ";
+		cout << node->Data << " ";
 
 		if (node->Left)
 		{
@@ -444,7 +452,7 @@ private:
 			InorderHelper(node->Left);
 		}
 
-		cout << node << " ";
+		cout << node->Data << " ";
 
 		if (node->Right)
 		{
@@ -469,7 +477,8 @@ private:
 			PostorderHelper(node->Right);
 		}
 
-		cout << node << " ";
+		cout << node->Data << " ";
+
 	}
 
 public:
